@@ -15,5 +15,8 @@
             </div>
         {% endfor %}
     </div>
+    <div id="my-album"></div>
 {% endblock %}
 {% block title %}Listado de Pokemons{% endblock %}
+
+{% block stylesheets %} {{ encore_entry_link_tags('listado') }}{% endblock %}
