@@ -8,8 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Pokemon;
+use App\Form\PokemonFormType;
 use Doctrine\ORM\EntityManagerInterface;
-
+use Symfony\Component\HttpFoundation\Request;
 
 class PokemonController extends AbstractController {
 
@@ -63,6 +64,21 @@ class PokemonController extends AbstractController {
         $doctrine->flush();
 
         return $this->render("base.html.twig");
+    }
+
+    /**
+     * @Route("/create/pokemon")
+     */
+    public function addPokemon(Request $request, EntityManagerInterface $doctrine){
+        $form = $this->createForm(PokemonFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pokemon = $form->getData();
+            $doctrine->persist($pokemon);
+            $doctrine->flush();
+        }
+        return $this->renderForm("pokemons/createPokemon.html.twig", ["pokemonForm"=>$form]);
     }
 
 }
