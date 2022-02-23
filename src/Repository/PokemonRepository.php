@@ -19,13 +19,15 @@ class PokemonRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokemon::class);
     }
 
-
-    public function findPokemonsByDebilidad(int $id)
+    /**
+     * @return Pokemon[] Returns an array of Pokemon objects
+     */
+    public function findPokemonsByDebilidad(string $name)
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.debilidades', 'd')
-            ->andWhere('d.id = :deb')
-            ->setParameter('deb', $id)
+            ->andWhere('d.name = :deb')
+            ->setParameter('deb', $name)
             ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

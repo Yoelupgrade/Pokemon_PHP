@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Debilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Pokemon;
 use App\Form\PokemonFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 class PokemonController extends AbstractController {
 
@@ -69,7 +69,8 @@ class PokemonController extends AbstractController {
     /**
      * @Route("/create/pokemon")
      */
-    public function addPokemon(Request $request, EntityManagerInterface $doctrine){
+    public function addPokemon(Request $request, EntityManagerInterface $doctrine)
+    {
         $form = $this->createForm(PokemonFormType::class);
         $form->handleRequest($request);
 
@@ -78,7 +79,18 @@ class PokemonController extends AbstractController {
             $doctrine->persist($pokemon);
             $doctrine->flush();
         }
-        return $this->renderForm("pokemons/createPokemon.html.twig", ["pokemonForm"=>$form]);
+        return $this->renderForm("pokemons/createPokemon.html.twig", ["pokemonForm" => $form]);
+    }
+
+    /**
+     * @Route("/pokemonsDebilidad/{id}")
+     */
+    public function pokemonsDebilidad($id, EntityManagerInterface $doctrine)
+    {
+        $repository = $doctrine->getRepository(Pokemon::class);
+        $pokemons = $repository->findPokemonsByDebilidad($id);
+
+        return $this->render("pokemons/listPokemon.html.twig",  ["pokemons"=>$pokemons]);
     }
 
 }
