@@ -1,5 +1,8 @@
 {% extends 'pokemons/base.html.twig' %}
 {% block body %}
+    {% for message in app.flashes('exito') %}
+        <p>{{ message }}</p>
+    {% endfor %}
     {{ form_start(pokemonForm) }}
         {{ form_widget(pokemonForm) }}
         <button type="submit">Añadir</button>

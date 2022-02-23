@@ -67,7 +67,7 @@ class PokemonController extends AbstractController {
     }
 
     /**
-     * @Route("/create/pokemon")
+     * @Route("/create/pokemon", name="createPokemon")
      */
     public function addPokemon(Request $request, EntityManagerInterface $doctrine)
     {
@@ -78,6 +78,8 @@ class PokemonController extends AbstractController {
             $pokemon = $form->getData();
             $doctrine->persist($pokemon);
             $doctrine->flush();
+            $this->addFlash('exito', 'Pokemon insertado correctamente');
+            return $this->redirectToRoute('listPokemons');
         }
         return $this->renderForm("pokemons/createPokemon.html.twig", ["pokemonForm" => $form]);
     }
