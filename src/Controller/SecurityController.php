@@ -36,9 +36,17 @@ class SecurityController extends AbstractController
     public function createUser(EntityManagerInterface $doctrine, UserPasswordHasherInterface $passwordHasher)
     {
         $user = new User();
-        $user->setUsername('Bertus');
+        $user->setUsername('moises');
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($passwordHasher->hashPassword($user,'123456'));
+
+        $admin = new User();
+        $admin->setUsername('admin');
+        $admin->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+        $admin->setPassword($passwordHasher->hashPassword($admin,'123456'));
+
         $doctrine->persist($user);
+        $doctrine->persist($admin);
         $doctrine->flush();
     }
 }
